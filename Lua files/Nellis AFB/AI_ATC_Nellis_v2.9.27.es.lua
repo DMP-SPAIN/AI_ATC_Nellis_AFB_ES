@@ -5363,7 +5363,7 @@ function AI_ATC:ClearanceSubMenu(Alias)
   MENU_GROUP_COMMAND:New(Group, "Jedi", Menu3, function() AI_ATC:SetCallsign(Alias, "Jedi",             "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Sting", Menu3, function() AI_ATC:SetCallsign(Alias, "Sting",           "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Snake",    Menu3, function() AI_ATC:SetCallsign(Alias, "Snake",        "11") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "Fuerte",    Menu3, function() AI_ATC:SetCallsign(Alias, "Fuerte",        "11") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "Fuerte",    Menu3, function() AI_ATC:SetCallsign(Alias, "Heavy",        "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Raygun",  Menu3, function() AI_ATC:SetCallsign(Alias, "Raygun",        "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Cupcake",  Menu3, function() AI_ATC:SetCallsign(Alias, "Cupcake",      "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Hawk",   Menu3, function() AI_ATC:SetCallsign(Alias, "Hawk",           "11") end, Group)
@@ -5504,7 +5504,7 @@ function AI_ATC:ReadBackSubMenu(Alias)
   MENU_GROUP_COMMAND:New(Group, "Jedi", Menu3, function() AI_ATC:SetCallsign(Alias, "Jedi",             "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Sting", Menu3, function() AI_ATC:SetCallsign(Alias, "Sting",           "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Snake",    Menu3, function() AI_ATC:SetCallsign(Alias, "Snake",        "11") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "Fuerte",    Menu3, function() AI_ATC:SetCallsign(Alias, "Fuerte",        "11") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "Fuerte",    Menu3, function() AI_ATC:SetCallsign(Alias, "Heavy",        "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Raygun",  Menu3, function() AI_ATC:SetCallsign(Alias, "Raygun",        "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Cupcake",  Menu3, function() AI_ATC:SetCallsign(Alias, "Cupcake",      "11") end, Group)
   MENU_GROUP_COMMAND:New(Group, "Hawk",   Menu3, function() AI_ATC:SetCallsign(Alias, "Hawk",           "11") end, Group)
@@ -5593,7 +5593,7 @@ function AI_ATC:GroundStartSubMenu(Alias)
     MENU_GROUP_COMMAND:New( Group, "Solicitar rodaje a pista", AI_ATC_Ground_Menu, function()AI_ATC:TaxiClearance(Alias) end, Group)
     MENU_GROUP_COMMAND:New( Group, "Solicitar rodaje a Jolly Pad", AI_ATC_Ground_Menu, function()AI_ATC:HeloTaxi(Alias) end, Group)
     MENU_GROUP_COMMAND:New( Group, "Solicitar despegue desde estacionamiento", AI_ATC_Tower_Menu, function()AI_ATC:TakeoffFromParking(Alias) end, Group)
-    MENU_GROUP_COMMAND:New( Group, "Solicitar comprobación de vuelo estacionario", AI_ATC_Tower_Menu, function()AI_ATC:HoverCheck(Alias, "Torre") end, Group)
+    MENU_GROUP_COMMAND:New( Group, "Solicitar comprobación de vuelo estacionario", AI_ATC_Tower_Menu, function()AI_ATC:HoverCheck(Alias, "Tower") end, Group)
   end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -6405,8 +6405,8 @@ function AI_ATC:WingmanBaseSubMenu(Alias)
   local BaseMenu = MENU_GROUP:New(Group, "Informar base", CommandMenu)
   MENU_GROUP_COMMAND:New(Group, "2# Parada completa", BaseMenu, function() AI_ATC:WingmanReportBase(Alias, "Full Stop", "2") end, Group)
   MENU_GROUP_COMMAND:New(Group, "2# Toma y despegue", BaseMenu, function() AI_ATC:WingmanReportBase(Alias, "Touch and Go", "2") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "2# Aproximación baja", BaseMenu, function() AI_ATC:WingmanReportBase(Alias, "Aproximación baja", "2") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "2# Opción", BaseMenu, function() AI_ATC:WingmanReportBase(Alias, "Procedimiento opción", "2") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "2# Aproximación baja", BaseMenu, function() AI_ATC:WingmanReportBase(Alias, "Low Approach", "2") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "2# Opción", BaseMenu, function() AI_ATC:WingmanReportBase(Alias, "Option", "2") end, Group)
   
   ATM.ClientData[Alias].Wingman2Menu = Wingman2Menu
   
@@ -6415,8 +6415,8 @@ function AI_ATC:WingmanBaseSubMenu(Alias)
   local BaseMenu3 = MENU_GROUP:New(Group, "Informar base", CommandMenu3)
   MENU_GROUP_COMMAND:New(Group, "3# Parada completa", BaseMenu3, function() AI_ATC:WingmanReportBase(Alias, "Full Stop", "3") end, Group)
   MENU_GROUP_COMMAND:New(Group, "3# Toma y despegue", BaseMenu3, function() AI_ATC:WingmanReportBase(Alias, "Touch and Go", "3") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "3# Aproximación baja", BaseMenu3, function() AI_ATC:WingmanReportBase(Alias, "Aproximación baja", "3") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "3# Opción", BaseMenu3, function() AI_ATC:WingmanReportBase(Alias, "Procedimiento opción", "3") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "3# Aproximación baja", BaseMenu3, function() AI_ATC:WingmanReportBase(Alias, "Low Approach", "3") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "3# Opción", BaseMenu3, function() AI_ATC:WingmanReportBase(Alias, "Option", "3") end, Group)
   
   ATM.ClientData[Alias].Wingman3Menu = Wingman3Menu
   
@@ -6425,8 +6425,8 @@ function AI_ATC:WingmanBaseSubMenu(Alias)
   local BaseMenu4 = MENU_GROUP:New(Group, "Informar base", CommandMenu4)
   MENU_GROUP_COMMAND:New(Group, "4# Parada completa", BaseMenu4, function() AI_ATC:WingmanReportBase(Alias, "Full Stop", "4") end, Group)
   MENU_GROUP_COMMAND:New(Group, "4# Toma y despegue", BaseMenu4, function() AI_ATC:WingmanReportBase(Alias, "Touch and Go", "4") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "4# Aproximación baja", BaseMenu4, function() AI_ATC:WingmanReportBase(Alias, "Aproximación baja", "4") end, Group)
-  MENU_GROUP_COMMAND:New(Group, "4# Opción", BaseMenu4, function() AI_ATC:WingmanReportBase(Alias, "Procedimiento opción", "4") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "4# Aproximación baja", BaseMenu4, function() AI_ATC:WingmanReportBase(Alias, "Low Approach", "4") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "4# Opción", BaseMenu4, function() AI_ATC:WingmanReportBase(Alias, "Option", "4") end, Group)
   
   ATM.ClientData[Alias].Wingman4Menu = Wingman4Menu
 end
@@ -6531,7 +6531,7 @@ function AI_ATC:GCAGoAroundSubMenu(Alias, RadioObject)
   local CommandMenu = MENU_GROUP:New(Group, "Solicitar", ApproachMenu)
   MENU_GROUP_COMMAND:New(Group, " ", ApproachMenu, function()  end, Group)
   MENU_GROUP_COMMAND:New(Group, "  ", ApproachMenu, function()  end, Group)
-  MENU_GROUP_COMMAND:New(Group, "Cancelar IFR", ApproachMenu, function() AI_ATC:CancelIFR(Alias, "Torre") end, Group)
+  MENU_GROUP_COMMAND:New(Group, "Cancelar IFR", ApproachMenu, function() AI_ATC:CancelIFR(Alias, "Tower") end, Group)
   
   if ApproachType=="Generic" then
     ApproachType = Proceedure

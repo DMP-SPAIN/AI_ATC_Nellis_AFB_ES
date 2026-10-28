@@ -1,6 +1,11 @@
-# AI_ATC Nellis AFB
+# AI_ATC Nellis AFB — localización española
 
 ![AI_ATC Nellis AFB(2)](https://github.com/user-attachments/assets/b557d1a7-9c99-491d-a667-46c3e44fe19b)
+
+Esta es la copia pública mantenida por **DMP-SPAIN** para descargar y usar la
+localización española de AI_ATC. El proyecto original es de
+[Avalanche110](https://github.com/Avalanche110/AI_ATC_Nellis_AFB); esta copia no
+reclama su autoría.
 
 AI_ATC para Nellis AFB, Creech AFB y Silverbow AF.
 
@@ -84,6 +89,16 @@ También se ha comprobado que:
 - Los literales protegidos, argumentos, rutas, ficheros `.ogg` y estructura
   Lua no cambian fuera de los campos visibles.
 - Los manuales traducidos están en UTF-8.
+
+La comprobación reproducible de las claves internas se ejecuta con:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tests/validate_spanish_contracts.ps1
+```
+
+El script garantiza que los identificadores que usa el motor (`Tower`,
+`Ground`, `Heavy`, `Low Approach` y `Option`) no se traduzcan dentro de las
+llamadas Lua.
 
 ## Licencia y atribución
 
