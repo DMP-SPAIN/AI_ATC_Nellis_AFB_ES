@@ -41,12 +41,20 @@ Es una copia completa de la misión principal de AI_ATC: conserva los audios,
 el tráfico, los datos de las tres bases, los triggers y el resto de recursos.
 Solo sustituye dentro de `l10n/DEFAULT/` los tres scripts AI_ATC por sus
 versiones españolas, manteniendo los nombres que espera `mapResource`, e
-integra los cinco documentos de `Documentation/Spanish/` dentro del archivo.
+integra los cinco documentos de `Documentation/Spanish/` y los 48 gráficos
+del kneeboard traducidos dentro del archivo.
 
 No hace falta abrir el `.miz` ni copiar Lua manualmente: descarga el archivo,
 haz una copia de seguridad de tu instalación y ábrelo desde DCS como cualquier
 otra misión. DCS no muestra automáticamente esos Markdown en el menú; están
 dentro del `.miz` como documentación descargable y también en el repositorio.
+
+### Cartas visuales para reutilizar
+
+`CARTAS_ES/` contiene únicamente las 38 cartas aeronáuticas traducidas: cartas
+de aeródromo, salidas, aproximaciones, ILS/TACAN, procedimientos y patrones.
+No contiene Lua, triggers, audios, configuración ni lógica de AI_ATC, para poder
+reutilizar las imágenes desde otros proyectos como ATCore.
 
 ### Manuales traducidos
 

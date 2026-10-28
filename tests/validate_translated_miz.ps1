@@ -20,6 +20,7 @@ $documentationFiles = @(Get-ChildItem -LiteralPath 'Documentation\Spanish' -File
         LocalPath = $_.FullName
     }
 })
+$graphicsPrefix = 'KNEEBOARD/IMAGES/'
 
 function Get-StreamHash([System.IO.Stream]$Stream) {
     $sha = [System.Security.Cryptography.SHA256]::Create()
@@ -72,6 +73,11 @@ try {
     foreach ($entry in $sourceZip.Entries) { $sourceEntries[$entry.FullName] = $entry }
     $missionEntries = @{}
     foreach ($entry in $missionZip.Entries) { $missionEntries[$entry.FullName] = $entry }
+    $sourceGraphics = @($sourceEntries.Keys | Where-Object { $_ -like ($graphicsPrefix + '*.png') })
+    $missionGraphics = @($missionEntries.Keys | Where-Object { $_ -like ($graphicsPrefix + '*.png') })
+    if ($sourceGraphics.Count -ne 48 -or $missionGraphics.Count -ne 48) {
+        throw "Se esperaban 48 gráficos internos: original=$($sourceGraphics.Count), traducida=$($missionGraphics.Count)."
+    }
 
     $allowedDocumentation = @{}
     foreach ($doc in $documentationFiles) { $allowedDocumentation[$doc.ArchiveName] = $doc.LocalPath }
@@ -93,6 +99,8 @@ try {
             if ($expected -ne $actual) {
                 throw "El Lua integrado no coincide con la traducción: $name"
             }
+        } elseif ($name -like ($graphicsPrefix + '*.png')) {
+            continue
         } else {
             $expected = Get-ZipEntryHash $sourceEntries[$name]
             $actual = Get-ZipEntryHash $missionEntries[$name]
@@ -135,7 +143,20 @@ try {
         }
     }
 
-    Write-Output "Translated .miz: PASS ($($missionEntries.Count) entradas; $($translatedFiles.Count) Lua integrados; $($documentationFiles.Count) manuales integrados)"
+    $graphicsTemp = Join-Path $temp 'graphics'
+    Add-Type -AssemblyName System.Drawing
+    foreach ($name in $sourceGraphics) {
+        $target = Join-Path $graphicsTemp (Split-Path -Leaf $name)
+        Save-ZipEntry $missionEntries[$name] $target
+        $image = [System.Drawing.Image]::FromFile($target)
+        try {
+            if ($image.Width -le 0 -or $image.Height -le 0) { throw "Dimensiones inválidas: $name" }
+        } finally {
+            $image.Dispose()
+        }
+    }
+
+    Write-Output "Translated .miz: PASS ($($missionEntries.Count) entradas; $($translatedFiles.Count) Lua integrados; $($documentationFiles.Count) manuales integrados; $($missionGraphics.Count) gráficos internos válidos)"
 } finally {
     $missionZip.Dispose()
     $sourceZip.Dispose()
