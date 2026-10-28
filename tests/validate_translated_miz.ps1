@@ -21,6 +21,13 @@ $documentationFiles = @(Get-ChildItem -LiteralPath 'Documentation\Spanish' -File
     }
 })
 $graphicsPrefix = 'KNEEBOARD/IMAGES/'
+$chartDirectory = 'CARTAS_ES'
+$nonChartNames = @(
+    'AA_localFrequencies.png', 'AAB_Local Frequencies.png', 'AB_Authentication.png',
+    'AC_RadioCalls-P1_v2.0.png', 'AD_RadioCalls-P2_v2.0.png', 'AE_RadioCalls-P3_v2.0.png',
+    'AF_RadioCalls-P4_v2.0.png', 'AG_RadioCalls-P5_v2.0.png', 'AH_RadioCalls-P6_v2.0.png',
+    'AI_RadioCalls-P7_v2.0.png'
+)
 
 function Get-StreamHash([System.IO.Stream]$Stream) {
     $sha = [System.Security.Cryptography.SHA256]::Create()
@@ -77,6 +84,17 @@ try {
     $missionGraphics = @($missionEntries.Keys | Where-Object { $_ -like ($graphicsPrefix + '*.png') })
     if ($sourceGraphics.Count -ne 48 -or $missionGraphics.Count -ne 48) {
         throw "Se esperaban 48 gráficos internos: original=$($sourceGraphics.Count), traducida=$($missionGraphics.Count)."
+    }
+    $expectedChartNames = @($sourceGraphics | ForEach-Object { Split-Path -Leaf $_ } | Where-Object { $_ -notin $nonChartNames })
+    $chartFiles = @(Get-ChildItem -LiteralPath $chartDirectory -File)
+    $actualChartNames = @($chartFiles | Select-Object -ExpandProperty Name)
+    if ($actualChartNames.Count -ne 38) {
+        throw "Se esperaban 38 cartas externas y hay $($actualChartNames.Count)."
+    }
+    $missingCharts = @($expectedChartNames | Where-Object { $_ -notin $actualChartNames })
+    $unexpectedCharts = @($actualChartNames | Where-Object { $_ -notin $expectedChartNames })
+    if ($missingCharts.Count -gt 0 -or $unexpectedCharts.Count -gt 0) {
+        throw "La carpeta CARTAS_ES no coincide. Faltan=$($missingCharts -join ', '); sobran=$($unexpectedCharts -join ', ')"
     }
 
     $allowedDocumentation = @{}
@@ -155,8 +173,16 @@ try {
             $image.Dispose()
         }
     }
+    foreach ($name in $expectedChartNames) {
+        $archiveName = $graphicsPrefix + $name
+        $expected = Get-FileHashValue (Resolve-Path -LiteralPath (Join-Path $chartDirectory $name)).Path
+        $actual = Get-ZipEntryHash $missionEntries[$archiveName]
+        if ($expected -ne $actual) {
+            throw "La carta externa no coincide con la integrada: $name"
+        }
+    }
 
-    Write-Output "Translated .miz: PASS ($($missionEntries.Count) entradas; $($translatedFiles.Count) Lua integrados; $($documentationFiles.Count) manuales integrados; $($missionGraphics.Count) gráficos internos válidos)"
+    Write-Output "Translated .miz: PASS ($($missionEntries.Count) entradas; $($translatedFiles.Count) Lua integrados; $($documentationFiles.Count) manuales integrados; $($missionGraphics.Count) gráficos internos válidos; $($chartFiles.Count) cartas externas)"
 } finally {
     $missionZip.Dispose()
     $sourceZip.Dispose()
