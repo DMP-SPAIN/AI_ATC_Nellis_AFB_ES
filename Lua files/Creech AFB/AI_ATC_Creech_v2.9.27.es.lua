@@ -8340,7 +8340,7 @@ function AI_ATC3:WindSpeed(number, String, RadioObject, transmitter)
     AI_ATC3:WindDirection(String, RadioObject, transmitter)
   end
   if number >= 25 then
-    local Subtitle = string.format("%s: Strong vientos blowing %s", Title, String)
+    local Subtitle = string.format("%s: Viento fuerte soplando %s", Title, String)
     RadioObject:NewTransmission("WindsStrong.ogg", 0.766, string.format("Airbase_ATC/%s/SoundFiles/", RadioKey), nil, 0.2, Subtitle, 1.4)
     RadioObject:NewTransmission("Blowing.ogg", 0.350, string.format("Airbase_ATC/%s/SoundFiles/", RadioKey), nil, nil)
     AI_ATC3:WindDirection(String, RadioObject, transmitter)
@@ -8640,13 +8640,13 @@ function AI_ATC3:TaxiQueue(Alias, RadioObject, transmitter, Audio)
     local Taxiway = ATM3.TaxiQueue[Alias].Taxi
     local Queue = tostring(Count)
 
-    local Subtitle1 = string.format("Your number %s in line for departure", Queue)
+    local Subtitle1 = string.format("Su número %s en la cola de salida", Queue)
     local Subtitle2 = ""
 
     if Taxiway == ATM3.ClientData[Alias].Taxi[1] then
-      Subtitle2 = string.format("follow the %s in front of you", TypeName)
+      Subtitle2 = string.format("siga al %s que tiene delante", TypeName)
     else
-      Subtitle2 = string.format("behind the %s on taxiway %s", TypeName, Taxiway)
+      Subtitle2 = string.format("detrás del %s en la calle de rodaje %s", TypeName, Taxiway)
     end
 
     if AI_ATC3_MSRS and AI_ATC3_MSRS["Ground"] and AI_ATC3_MSRS["Ground"].Active then
@@ -9633,7 +9633,7 @@ function AI_ATC3:ClearanceDelivery(Alias, Audio)
   SCHEDULER:New(nil, function()
     AI_ATC3:ChannelOpen(14, Transmitter, Alias)
     local Subtitle = string.format("%s: %s, %s, autorizado salida as filed.", Title, CallsignSub, Title )
-    local Subtitle1 = Subtitle..string.format(" Contact Nellis Control on 254.4, Squawk %s%s", Squawk, Sequential)
+    local Subtitle1 = Subtitle..string.format(" Contacte Nellis Control en 254.4. Transpondedor %s%s", Squawk, Sequential)
     if AI_ATC3_MSRS and AI_ATC3_MSRS["Clearance"] and AI_ATC3_MSRS["Clearance"].Active then
       local spokenSquawk   = AI_ATC3:SRS_ConvertDigits(Squawk)
       local spokenCallsign = AI_ATC3:SRS_ConvertCallsign(CallsignSub)
@@ -9651,7 +9651,7 @@ function AI_ATC3:ClearanceDelivery(Alias, Audio)
     RadioObject:NewTransmission("CreechClearance.ogg", 1.440, "Airbase_ATC/Clearance/SoundFiles/", nil, 0.2)
     RadioObject:NewTransmission("AsFiled.ogg", 1.277, "Airbase_ATC/Clearance/SoundFiles/", nil, 0.2)
     
-    Subtitle = string.format("%s: Contacte Nellis Control en 254.4, Squawk %s%s", Title, Squawk, Sequential)
+    Subtitle = string.format("%s: Contacte Nellis Control en 254.4, Transpondedor %s%s", Title, Squawk, Sequential)
     RadioObject:NewTransmission("DeadAir.ogg", 0.100, "Airbase_ATC/Ground/SoundFiles/", nil, 0.1, Subtitle, 8)
     RadioObject:NewTransmission("NellisControl.ogg", 3.669, "Airbase_ATC/Clearance/SoundFiles/", nil, nil)
     if Squawk and string.find(Squawk, "001", 1, true) then
@@ -9959,7 +9959,7 @@ function AI_ATC3:TaxiClearance(Alias)
         local msg = string.format("%s, %s tierra. Pista %s, ruede por %s.%s Contacte torre manteniendo fuera pista %s.",
           spokenCallsign, AI_ATC3.AirbaseAlias, spokenRunway, TaxiSubtitle, taxiQueue or "", spokenHold)
           
-        local Subtitle1 = Subtitle..taxiQueue..string.format(". Contact tower holding short runway %s", HoldShort )
+        local Subtitle1 = Subtitle..taxiQueue..string.format(". Contacte torre y manténgase antes de la pista %s", HoldShort )
         AI_ATC3:TransmitSRS(Transmitter, msg, 0, nil, RadioObject, Subtitle1, 10)
         return
       end
@@ -10348,13 +10348,13 @@ function AI_ATC3:TakeoffFromParking(Alias)
     AI_ATC3:DepartureSubMenu(Alias)
     AI_ATC3:RepeatLastTransmission(Alias, function()AI_ATC3:TakeoffFromParking(Alias) end)
     Runway = AI_ATC3.Runways.Takeoff[1]
-    Instruction = string.format("%s: Depart field y Remain clear de pista %s. Extreme la precaución.", Title, Runway)
+    Instruction = string.format("%s: Abandone el campo y manténgase fuera de la pista %s. Extreme la precaución.", Title, Runway)
   end,{}, 1.0 )
 
   
   SCHEDULER:New(nil, function()
     AI_ATC3:ChannelOpen(6, Transmitter, Alias)
-    local Subtitle = string.format("%s: %s, %s. Depart field y remain clear de pista %s, Extreme la precaución", Title, CallsignSub, Title, Runway)
+    local Subtitle = string.format("%s: %s, %s. Abandone el campo y manténgase fuera de la pista %s. Extreme la precaución", Title, CallsignSub, Title, Runway)
 
     if AI_ATC3_MSRS and AI_ATC3_MSRS[Transmitter] and AI_ATC3_MSRS[Transmitter].Active then
       local spokenCallsign = AI_ATC3:SRS_ConvertCallsign(CallsignSub)
@@ -10436,7 +10436,7 @@ function AI_ATC3:TakeoffClearance(Alias, Climb, Audio)
     end
     
     if Climb then
-      Instruction  = string.format(" Ascenso rápido to %s autorizado.", Climb)
+      Instruction  = string.format(" Ascenso rápido a %s autorizado.", Climb)
     else
       Instruction = ""
     end
@@ -10789,7 +10789,7 @@ function AI_ATC3:VFRDeparture(Alias, Audio)
     local TrafficAltitudeSub = AI_ATC3:ReadFlightLevel(TrafficAltitude, RadioObject, Transmitter, false)
     AI_ATC3:ChannelOpen(7, Transmitter, Alias)
 
-    local Subtitle = string.format("%s: %s bound tráfico a sus %s en punto, %s millas a %s", Title, TrafficCardinal, Bearing, Range, TrafficAltitudeSub)
+    local Subtitle = string.format("%s: %s tráfico en dirección a sus %s en punto, %s millas a %s", Title, TrafficCardinal, Bearing, Range, TrafficAltitudeSub)
     RadioObject:NewTransmission("DeadAir.ogg", 0.100, "Airbase_ATC/Departure/SoundFiles/", nil, 0.3, Subtitle, 5)
     AI_ATC3:ReadCardinal(TrafficCardinal, RadioObject, Transmitter)
     RadioObject:NewTransmission("Traffic.ogg", 0.511, "Airbase_ATC/Departure/SoundFiles/", nil, nil)
@@ -11146,7 +11146,7 @@ function AI_ATC3:IFRDeparture(Alias, Audio)
     if SIDdata.SpecialInstruction then
       Turn = CalculateTurnDirection(Unit, Bearing)
       TurnAudio = TurnAudio[Turn]
-       InstructionSub = InstructionSub.."vire "..Turn.." heading "..Bearing
+       InstructionSub = InstructionSub.."vire "..Turn.." rumbo "..Bearing
     end
   end,{}, 1.0 )
   
@@ -11164,7 +11164,7 @@ function AI_ATC3:IFRDeparture(Alias, Audio)
 
       if SIDdata.SpecialInstruction then
         local spokenBearing = AI_ATC3:SRS_ConvertHeading(Bearing)
-         spokenInstruction = SIDdata.Instruction.Subtitle .. "vire " .. string.lower(Turn) .. " heading " .. spokenBearing
+         spokenInstruction = SIDdata.Instruction.Subtitle .. "vire " .. string.lower(Turn) .. " rumbo " .. spokenBearing
       end
 
       local msg = string.format("%s, Nellis Control, radar contacte.", spokenCallsign)
@@ -12700,7 +12700,7 @@ function AI_ATC3:IFRApproachType5(Alias, Type, Call, Base)
     AI_ATC3:RepeatLastTransmission(Alias, function() GCAExecute() end)
     AI_ATC3:ChannelOpen(8, Transmitter, Alias)
     local Subtitle = string.format("%s: %s, %s. Contacto radar.", Title, CallsignSub, Title )
-    local Subtitle1 = Subtitle..string.format(" Expect PAR approach to Runway %s. Wind %s at %s. Altimeter %s.", Runway, WindDirection, WindSpeed, QNH )
+    local Subtitle1 = Subtitle..string.format(" Espere aproximación PAR a la pista %s. Viento %s a %s. Altímetro %s.", Runway, WindDirection, WindSpeed, QNH )
     if AI_ATC3_MSRS and AI_ATC3_MSRS[Transmitter] and AI_ATC3_MSRS[Transmitter].Active then
       local spokenCallsign = AI_ATC3:SRS_ConvertCallsign(CallsignSub)
       local spokenRunway   = AI_ATC3:SRS_ConvertRunway(Runway)
@@ -12723,7 +12723,7 @@ function AI_ATC3:IFRApproachType5(Alias, Type, Call, Base)
     RadioObject:NewTransmission("GCA.ogg", 0.987, "Airbase_ATC/Departure/SoundFiles/", nil, 0.01)
     RadioObject:NewTransmission("RadarContact.ogg", 0.848, "Airbase_ATC/Departure/SoundFiles/", nil, 0.11)
 
-    Subtitle = string.format("%s: Espere PAR aproximación to Pista %s. Viento %s a %s. Altimeter %s.", Title, Runway, WindDirection, WindSpeed, QNH )
+    Subtitle = string.format("%s: Espere aproximación PAR a la pista %s. Viento %s a %s. Altímetro %s.", Title, Runway, WindDirection, WindSpeed, QNH )
     RadioObject:NewTransmission("DeadAir.ogg", 0.100, "Airbase_ATC/Ground/SoundFiles/", nil, 0.3, Subtitle, 8)
     RadioObject:NewTransmission("PARApproach.ogg", 2.014, "Airbase_ATC/Departure/SoundFiles/", nil, nil)
     AI_ATC3:Runway(Runway, RadioObject, Transmitter)
@@ -13448,7 +13448,7 @@ function AI_ATC3:ApproachBackToRadar(Alias, Type)
     elseif Type == "TACAN" then
       Instruction = string.format("Vectores a la TACAN pista %s.", Runway)
     elseif Type == "PAR" then
-      Instruction = string.format("Espere PAR aproximación to Pista %s.", Runway)
+      Instruction = string.format("Espere aproximación PAR a la pista %s.", Runway)
     end
   end, {}, 0.5)
   
@@ -13943,7 +13943,7 @@ function AI_ATC3:Push_Tower(Alias)
       local RadioObject = AI_ATC3:FindTransmitter(Alias, Transmitter)
       AI_ATC3:ChannelOpen(12, Transmitter, Alias)
       if Approach=="VFR" or Approach=="Generic" then
-        local Subtitle = string.format("%s: %s contactee Indian Springs Torre en 360.600.", Title, CallsignSub)
+        local Subtitle = string.format("%s: %s contacte con Indian Springs Torre en 360.600.", Title, CallsignSub)
         if AI_ATC3_MSRS and AI_ATC3_MSRS[Transmitter] and AI_ATC3_MSRS[Transmitter].Active then
           local spokenCallsign = AI_ATC3:SRS_ConvertCallsign(CallsignSub)
           local spokenFreq = AI_ATC3:SRS_ConvertFrequency("Tower")
@@ -14036,7 +14036,7 @@ function AI_ATC3:CancelIFR(Alias, agency)
     SCHEDULER:New(nil, function()
       AI_ATC3:ChannelOpen(6, Transmitter, Alias)
       AI_ATC3:RepeatLastTransmission(Alias, function()ApproachMessage() end)
-      local Subtitle = string.format("%s: %s, cancellation recieved, contactee torre en 360.600.", Title, CallsignSub)
+      local Subtitle = string.format("%s: %s, cancelación recibida, contacte con torre en 360.600.", Title, CallsignSub)
       if AI_ATC3_MSRS and AI_ATC3_MSRS[Transmitter] and AI_ATC3_MSRS[Transmitter].Active then
         local spokenCallsign = AI_ATC3:SRS_ConvertCallsign(CallsignSub)
         local spokenFreq = AI_ATC3:SRS_ConvertFrequency("Tower")
@@ -14236,8 +14236,8 @@ function AI_ATC3:TowerTraffic(Alias)
   end
   
   local StateTbl = {
-    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "at Low Key"},
-    ["High Key"]              = {filename = "HighKey.ogg", duration = 0.742, subtitle = "at High Key"},
+    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "en punto bajo"},
+    ["High Key"]              = {filename = "HighKey.ogg", duration = 0.742, subtitle = "en punto alto"},
     ["On Departure"]         = {filename = "OnDeparture.ogg", duration = 0.771, subtitle = "en salida"},
     ["On Approach"]          = {filename = "OnApproach.ogg", duration = 0.719, subtitle = "en aproximación"},
     ["On Final Approach"]    = {filename = "OnFinal.ogg", duration = 0.570, subtitle = "en final"},
@@ -14250,10 +14250,10 @@ function AI_ATC3:TowerTraffic(Alias)
     ["Landed on runway 08"]  = {filename = "OnFinal.ogg", duration = 0.570, subtitle = "en final"},
     ["Landed on runway 26"]  = {filename = "OnFinal.ogg", duration = 0.570, subtitle = "en final"},
     ["Landed on runway 13"]  = {filename = "OnFinal.ogg", duration = 0.570, subtitle = "en final"},
-    ["Going around"]         = {filename = "GoingAround.ogg", duration = 0.727, subtitle = "going around"},
-    ["Outside Downwind"]     = {filename = "OutSide.ogg", duration = 1.2696, subtitle = "on outside viento de cola"},
+    ["Going around"]         = {filename = "GoingAround.ogg", duration = 0.727, subtitle = "aproximación frustrada"},
+    ["Outside Downwind"]     = {filename = "OutSide.ogg", duration = 1.2696, subtitle = "en viento de cola exterior"},
     ["Missed Approach"]      = {filename = "OnMissedApproach.ogg", duration = 0.955, subtitle = "en aproximación frustrada"},
-    ["Re-entering pattern"]  = {filename = "Reenter.ogg", duration = 0.917, subtitle = "re-entering Initial"},
+    ["Re-entering pattern"]  = {filename = "Reenter.ogg", duration = 0.917, subtitle = "reincorporándose al tramo inicial"},
   }
   
   local CountTbl = {
@@ -14692,7 +14692,7 @@ function AI_ATC3:Tower_Checkin(Alias)
   end
   
   local StateTbl = {
-    ["Re-entering pattern"]  = {filename = "Reenter.ogg", duration = 0.917, subtitle = "re-entering Initial"},
+    ["Re-entering pattern"]  = {filename = "Reenter.ogg", duration = 0.917, subtitle = "reincorporándose al tramo inicial"},
     ["On Approach"]          = {filename = "OnApproach.ogg", duration = 0.719, subtitle = "en aproximación"},
     ["On Final Approach"]    = {filename = "OnFinal.ogg", duration = 0.570, subtitle = "en final"},
     ["Initial"]              = {filename = "AtInitial.ogg", duration = 0.606, subtitle = "en inicial"},
@@ -14701,7 +14701,7 @@ function AI_ATC3:Tower_Checkin(Alias)
     ["Right Downwind"]       = {filename = "RightDownwind.ogg", duration = 0.564, subtitle = "en viento de cola derecho"},
     ["Left Base"]            = {filename = "LeftBase.ogg", duration = 0.895, subtitle = "en base izquierda"},
     ["Right Base"]           = {filename = "RightBase.ogg", duration = 0.893, subtitle = "en base derecha"},
-    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "at Low Key"},
+    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "en punto bajo"},
   }
   
   local Airbase, AirbaseCoord, AirbaseName, BreakZone, ApproachType, Subtitle, LandingSubtitle, SchedulerObject, SchedulerObject2, SchedulerObject3, SchedulerObject4
@@ -14800,7 +14800,7 @@ function AI_ATC3:Tower_Checkin(Alias)
       ApproachAngle = 10
       ReportRange = 7408
     elseif ApproachType == "SFO" then
-      Subtitle = string.format("%s: %s, %s, pista %s. %s vire out autorizado. Informe punto alto.", Title, CallsignSub, Title, Runway, Break)
+      Subtitle = string.format("%s: %s, %s, pista %s. %s viraje exterior autorizado. Informe punto alto.", Title, CallsignSub, Title, Runway, Break)
       ApproachAngle = 360
       ReportRange = 4630
     elseif ApproachType == "Deadside" then
@@ -15085,7 +15085,7 @@ function AI_ATC3:HeloRequestLanding(Alias, Type)
     SCHEDULER:New(nil, function()
       AI_ATC3:RepeatLastTransmission(Alias, function()ClosedCircuit() end)
       AI_ATC3:ChannelOpen(12, Transmitter, Alias)
-      local Subtitle = string.format("%s: %s %s, Pista %s, Join %s viento de cola a or below 3600. Informe base.", Title, CallsignSub, Title, Runway, Base)
+      local Subtitle = string.format("%s: %s %s, Pista %s, Incorpórese al viento de cola %s a 3600 o menos. Informe base.", Title, CallsignSub, Title, Runway, Base)
       if AI_ATC3_MSRS and AI_ATC3_MSRS[Transmitter] and AI_ATC3_MSRS[Transmitter].Active then
         local spokenCallsign = AI_ATC3:SRS_ConvertCallsign(CallsignSub)
         local spokenRunway = AI_ATC3:SRS_ConvertRunway(Runway)
@@ -15177,7 +15177,7 @@ function AI_ATC3:ReportKey(Alias, Key)
     ["Right Downwind"]       = {filename = "OnRightDownwind.ogg", duration = 0.564, subtitle = "en viento de cola derecho"},
     ["Left Base"]            = {filename = "LeftBase.ogg", duration = 0.895, subtitle = "en base izquierda"},
     ["Right Base"]           = {filename = "RightBase.ogg", duration = 0.893, subtitle = "en base derecha"},
-    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "at Low Key"},
+    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "en punto bajo"},
   }
   
   AI_ATC3:TerminateSchedules(Alias)
@@ -15415,7 +15415,7 @@ function AI_ATC3:Report5MileInitial(Alias)
     ["Right Downwind"]       = {filename = "OnRightDownwind.ogg", duration = 0.564, subtitle = "en viento de cola derecho"},
     ["Left Base"]            = {filename = "LeftBase.ogg", duration = 0.895, subtitle = "en base izquierda"},
     ["Right Base"]           = {filename = "RightBase.ogg", duration = 0.893, subtitle = "en base derecha"},
-    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "at Low Key"},
+    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "en punto bajo"},
   }
 
   AI_ATC3:TerminateSchedules(Alias)
@@ -16019,7 +16019,7 @@ function AI_ATC3:ClosedTraffic(Alias)
     ["Right Downwind"]       = {filename = "OnRightDownwind.ogg", duration = 0.564, subtitle = "en viento de cola derecho"},
     ["Left Base"]            = {filename = "LeftBase.ogg", duration = 0.895, subtitle = "en base izquierda"},
     ["Right Base"]           = {filename = "RightBase.ogg", duration = 0.893, subtitle = "en base derecha"},
-    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "at Low Key"},
+    ["Low Key"]              = {filename = "LowKey.ogg", duration = 0.686, subtitle = "en punto bajo"},
   }
   
   local function InitData()
@@ -17269,29 +17269,29 @@ function AI_ATC3:TowerPAR(Alias)
   end
 
   local AudioTbl = {
-    ["slightly left of course"]  = { filename = "SlightlyLeft.ogg",      duration = 1.391, subtitle = "Slightly left of course" },
-    ["slightly right of course"] = { filename = "SlightlyRight.ogg",     duration = 1.288, subtitle = "Slightly right of course" },
-    ["left of course"]           = { filename = "LeftOfCourse.ogg",      duration = 0.839, subtitle = "left of course" },
-    ["right of course"]          = { filename = "RightOfCourse.ogg",     duration = 0.820, subtitle = "right of course" },
-    ["well left of course"]      = { filename = "WellLeft.ogg",          duration = 1.193, subtitle = "Well left of course" },
-    ["well right of course"]     = { filename = "WellRight.ogg",         duration = 1.118, subtitle = "Well right of course" },
-    ["on course"]                = { filename = "OnCourse.ogg",          duration = 0.783, subtitle = "On course" },
-    ["slightly above glidepath"] = { filename = "SlightlyAbove.ogg",     duration = 1.503, subtitle = "Slightly above glidepath" },
-    ["slightly below glidepath"] = { filename = "SlightlyBelow.ogg",     duration = 1.361, subtitle = "Slightly below glidepath" },
-    ["well above glidepath"]     = { filename = "WellAbove.ogg",         duration = 1.207, subtitle = "Well above glidepath" },
-    ["well below glidepath"]     = { filename = "WellBelow.ogg",         duration = 1.044, subtitle = "Well below glidepath" },
-    ["on glidepath"]             = { filename = "OnGlidepath.ogg",       duration = 0.937, subtitle = "on glidepath" },
-    ["slowly left"]              = { filename = "LeftSlowly.ogg",        duration = 1.411, subtitle = "Going left of course slowly" },
-    ["rapidly left"]             = { filename = "LeftRapidly.ogg",       duration = 1.595, subtitle = "Going left of course rapidly" },
-    ["slowly right"]             = { filename = "RightSlowly.ogg",       duration = 1.315, subtitle = "Going right of course slowly" },
-    ["rapidly right"]            = { filename = "RightRapidly.ogg",      duration = 1.461, subtitle = "Going right of course rapidly" },
-    ["correcting"]               = { filename = "Correcting.ogg",        duration = 0.636, subtitle = "and correcting" },
-    ["and holding"]              = { filename = "Holding.ogg",           duration = 0.655, subtitle = "and holding" },
-    ["coming up"]                = { filename = "ComingUp.ogg",          duration = 0.691, subtitle = "and coming up" },
-    ["coming down"]              = { filename = "ComingDown.ogg",        duration = 0.853, subtitle = "and coming down" },
-    ["increase"]                 = { filename = "DescentRate.ogg",       duration = 1.218, subtitle = "increase rate of descent" },
-    ["decrease"]                 = { filename = "DecreaseDescent.ogg",   duration = 1.207, subtitle = "decrease rate of descent" },
-    ["climb now"]                = { filename = "ClimbNow.ogg",          duration = 0.660, subtitle = "Climb NOW!" },
+    ["slightly left of course"]  = { filename = "SlightlyLeft.ogg",      duration = 1.391, subtitle = "Ligeramente a la izquierda del rumbo" },
+    ["slightly right of course"] = { filename = "SlightlyRight.ogg",     duration = 1.288, subtitle = "Ligeramente a la derecha del rumbo" },
+    ["left of course"]           = { filename = "LeftOfCourse.ogg",      duration = 0.839, subtitle = "a la izquierda del rumbo" },
+    ["right of course"]          = { filename = "RightOfCourse.ogg",     duration = 0.820, subtitle = "a la derecha del rumbo" },
+    ["well left of course"]      = { filename = "WellLeft.ogg",          duration = 1.193, subtitle = "Muy a la izquierda del rumbo" },
+    ["well right of course"]     = { filename = "WellRight.ogg",         duration = 1.118, subtitle = "Muy a la derecha del rumbo" },
+    ["on course"]                = { filename = "OnCourse.ogg",          duration = 0.783, subtitle = "En rumbo" },
+    ["slightly above glidepath"] = { filename = "SlightlyAbove.ogg",     duration = 1.503, subtitle = "Ligeramente por encima de la senda de planeo" },
+    ["slightly below glidepath"] = { filename = "SlightlyBelow.ogg",     duration = 1.361, subtitle = "Ligeramente por debajo de la senda de planeo" },
+    ["well above glidepath"]     = { filename = "WellAbove.ogg",         duration = 1.207, subtitle = "Muy por encima de la senda de planeo" },
+    ["well below glidepath"]     = { filename = "WellBelow.ogg",         duration = 1.044, subtitle = "Muy por debajo de la senda de planeo" },
+    ["on glidepath"]             = { filename = "OnGlidepath.ogg",       duration = 0.937, subtitle = "en la senda de planeo" },
+    ["slowly left"]              = { filename = "LeftSlowly.ogg",        duration = 1.411, subtitle = "Desviándose lentamente a la izquierda del rumbo" },
+    ["rapidly left"]             = { filename = "LeftRapidly.ogg",       duration = 1.595, subtitle = "Desviándose rápidamente a la izquierda del rumbo" },
+    ["slowly right"]             = { filename = "RightSlowly.ogg",       duration = 1.315, subtitle = "Desviándose lentamente a la derecha del rumbo" },
+    ["rapidly right"]            = { filename = "RightRapidly.ogg",      duration = 1.461, subtitle = "Desviándose rápidamente a la derecha del rumbo" },
+    ["correcting"]               = { filename = "Correcting.ogg",        duration = 0.636, subtitle = "y corrigiendo" },
+    ["and holding"]              = { filename = "Holding.ogg",           duration = 0.655, subtitle = "y manteniendo" },
+    ["coming up"]                = { filename = "ComingUp.ogg",          duration = 0.691, subtitle = "y ascendiendo" },
+    ["coming down"]              = { filename = "ComingDown.ogg",        duration = 0.853, subtitle = "y descendiendo" },
+    ["increase"]                 = { filename = "DescentRate.ogg",       duration = 1.218, subtitle = "aumente la razón de descenso" },
+    ["decrease"]                 = { filename = "DecreaseDescent.ogg",   duration = 1.207, subtitle = "disminuya la razón de descenso" },
+    ["climb now"]                = { filename = "ClimbNow.ogg",          duration = 0.660, subtitle = "¡Ascienda AHORA!" },
     ["left"]                     = { filename = "TurnLeft.ogg",          duration = 0.827, subtitle = "vire a la izquierda rumbo" },
     ["right"]                    = { filename = "TurnRight.ogg",         duration = 0.922, subtitle = "vire a la derecha rumbo" },
   }
@@ -17492,7 +17492,7 @@ function AI_ATC3:TowerPAR(Alias)
   
   local function OverApproach()
     OverApproachFlag = true
-    local Subtitle = string.format("%s: over aproximación lights.", Title)
+    local Subtitle = string.format("%s: sobre las luces de aproximación.", Title)
     if AI_ATC3_MSRS and AI_ATC3_MSRS[Transmitter] and AI_ATC3_MSRS[Transmitter].Active then
       local msg = "Over aproximación lights."
       AI_ATC3:TransmitSRS(Transmitter, msg, 0, nil, RadioObject, Subtitle, 2)
@@ -17539,7 +17539,7 @@ function AI_ATC3:TowerPAR(Alias)
   
   local function AppGlidepath()
     ApproachingGlideFlag = true
-    local Subtitle = string.format("%s: Aproximación Glidepath, configure la aeronave para el aterrizaje.", Title)
+    local Subtitle = string.format("%s: Aproximación por senda de planeo, configure la aeronave para el aterrizaje.", Title)
     if AI_ATC3_MSRS and AI_ATC3_MSRS[Transmitter] and AI_ATC3_MSRS[Transmitter].Active then
       local msg = "Aproximación glidepath, configure la aeronave para el aterrizaje."
       AI_ATC3:TransmitSRS(Transmitter, msg, 0, nil, RadioObject, Subtitle, 2)
@@ -19197,9 +19197,9 @@ function AI_ATC3:TaxiParking(Alias)
     if Hold==true then
       AudioFile = TurnTable[TurnDirection]
       if TurnDirection=="Left" then
-        TurnSub = "Left turn"
+        TurnSub = "Vire a la izquierda"
       else
-        TurnSub = "Right turn"
+        TurnSub = "Vire a la derecha"
       end
       Duration = 5
       
