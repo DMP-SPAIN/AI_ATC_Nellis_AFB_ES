@@ -86,15 +86,18 @@ try {
         throw "Se esperaban 48 gráficos internos: original=$($sourceGraphics.Count), traducida=$($missionGraphics.Count)."
     }
     $expectedChartNames = @($sourceGraphics | ForEach-Object { Split-Path -Leaf $_ } | Where-Object { $_ -notin $nonChartNames })
-    $chartFiles = @(Get-ChildItem -LiteralPath $chartDirectory -File)
-    $actualChartNames = @($chartFiles | Select-Object -ExpandProperty Name)
-    if ($actualChartNames.Count -ne 38) {
-        throw "Se esperaban 38 cartas externas y hay $($actualChartNames.Count)."
-    }
-    $missingCharts = @($expectedChartNames | Where-Object { $_ -notin $actualChartNames })
-    $unexpectedCharts = @($actualChartNames | Where-Object { $_ -notin $expectedChartNames })
-    if ($missingCharts.Count -gt 0 -or $unexpectedCharts.Count -gt 0) {
-        throw "La carpeta CARTAS_ES no coincide. Faltan=$($missingCharts -join ', '); sobran=$($unexpectedCharts -join ', ')"
+    $chartFiles = @()
+    if (Test-Path -LiteralPath $chartDirectory) {
+        $chartFiles = @(Get-ChildItem -LiteralPath $chartDirectory -File)
+        $actualChartNames = @($chartFiles | Select-Object -ExpandProperty Name)
+        if ($actualChartNames.Count -ne 38) {
+            throw "Se esperaban 38 cartas externas y hay $($actualChartNames.Count)."
+        }
+        $missingCharts = @($expectedChartNames | Where-Object { $_ -notin $actualChartNames })
+        $unexpectedCharts = @($actualChartNames | Where-Object { $_ -notin $expectedChartNames })
+        if ($missingCharts.Count -gt 0 -or $unexpectedCharts.Count -gt 0) {
+            throw "La carpeta CARTAS_ES no coincide. Faltan=$($missingCharts -join ', '); sobran=$($unexpectedCharts -join ', ')"
+        }
     }
 
     $allowedDocumentation = @{}
@@ -173,16 +176,19 @@ try {
             $image.Dispose()
         }
     }
-    foreach ($name in $expectedChartNames) {
-        $archiveName = $graphicsPrefix + $name
-        $expected = Get-FileHashValue (Resolve-Path -LiteralPath (Join-Path $chartDirectory $name)).Path
-        $actual = Get-ZipEntryHash $missionEntries[$archiveName]
-        if ($expected -ne $actual) {
-            throw "La carta externa no coincide con la integrada: $name"
+    if ($chartFiles.Count -gt 0) {
+        foreach ($name in $expectedChartNames) {
+            $archiveName = $graphicsPrefix + $name
+            $expected = Get-FileHashValue (Resolve-Path -LiteralPath (Join-Path $chartDirectory $name)).Path
+            $actual = Get-ZipEntryHash $missionEntries[$archiveName]
+            if ($expected -ne $actual) {
+                throw "La carta externa no coincide con la integrada: $name"
+            }
         }
     }
 
-    Write-Output "Translated .miz: PASS ($($missionEntries.Count) entradas; $($translatedFiles.Count) Lua integrados; $($documentationFiles.Count) manuales integrados; $($missionGraphics.Count) gráficos internos válidos; $($chartFiles.Count) cartas externas)"
+    $chartStatus = if ($chartFiles.Count -gt 0) { "$($chartFiles.Count) cartas externas personales" } else { 'carpeta CARTAS_ES no presente' }
+    Write-Output "Translated .miz: PASS ($($missionEntries.Count) entradas; $($translatedFiles.Count) Lua integrados; $($documentationFiles.Count) manuales integrados; $($missionGraphics.Count) gráficos internos válidos; $chartStatus)"
 } finally {
     $missionZip.Dispose()
     $sourceZip.Dispose()

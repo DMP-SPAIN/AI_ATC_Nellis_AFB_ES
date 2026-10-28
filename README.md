@@ -49,13 +49,6 @@ haz una copia de seguridad de tu instalación y ábrelo desde DCS como cualquier
 otra misión. DCS no muestra automáticamente esos Markdown en el menú; están
 dentro del `.miz` como documentación descargable y también en el repositorio.
 
-### Cartas visuales para reutilizar
-
-`CARTAS_ES/` contiene únicamente las 38 cartas aeronáuticas traducidas: cartas
-de aeródromo, salidas, aproximaciones, ILS/TACAN, procedimientos y patrones.
-No contiene Lua, triggers, audios, configuración ni lógica de AI_ATC, para poder
-reutilizar las imágenes desde otros proyectos como ATCore.
-
 ### Manuales traducidos
 
 La documentación en español está en `Documentation/Spanish/`:
