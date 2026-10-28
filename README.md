@@ -34,6 +34,20 @@ procedimientos publicados, navpoints, pistas, frecuencias, nombres de audio,
 rutas `Airbase_ATC/...`, VFR/IFR, TACAN, ILS/LOC, PAR, GCA y otra terminología
 operativa que DCS o el script utiliza como identificador.
 
+## Misión `.miz` lista para usar
+
+La descarga recomendada es [`AI_ATC_Nellis_v2.10_ES.miz`](AI_ATC%20.miz%20file/AI_ATC_Nellis_v2.10_ES.miz).
+Es una copia completa de la misión principal de AI_ATC: conserva los audios,
+el tráfico, los datos de las tres bases, los triggers y el resto de recursos.
+Solo sustituye dentro de `l10n/DEFAULT/` los tres scripts AI_ATC por sus
+versiones españolas, manteniendo los nombres que espera `mapResource`, e
+integra los cinco documentos de `Documentation/Spanish/` dentro del archivo.
+
+No hace falta abrir el `.miz` ni copiar Lua manualmente: descarga el archivo,
+haz una copia de seguridad de tu instalación y ábrelo desde DCS como cualquier
+otra misión. DCS no muestra automáticamente esos Markdown en el menú; están
+dentro del `.miz` como documentación descargable y también en el repositorio.
+
 ### Manuales traducidos
 
 La documentación en español está en `Documentation/Spanish/`:
